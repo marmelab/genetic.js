@@ -14,8 +14,12 @@ module.exports = function() {
 
     function dumbMutate(data) {
         var result = [].concat(data);
-        var index = config.randomizer(0, result.length - 1);
-        result[index] = !result[index] ? 1 : 0;
+        var index1 = config.randomizer(0, result.length - 1);
+        var index2= config.randomizer(0, result.length - 1);
+
+        var temp = result[index1];
+        result[index1] = result[index2];
+        result[index2] = temp;
 
         return result;
     }

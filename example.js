@@ -32,7 +32,13 @@ var fitnessCallback = function(data) {
         }
     }
 
-    return 1/totalDistance;
+    var fitness = 1/totalDistance;
+
+    if (fitness !== fitness) {
+        console.log('err', i-1, data[i-1] - 1, i,  data[i] - 1, totalDistance);
+        throw new Error('eee');
+    }
+    return fitness;
 }
 // console.log(getVoyager(distances.length));
 var routesPopulation = population(selectionWheel).data((function () {
@@ -41,18 +47,21 @@ var routesPopulation = population(selectionWheel).data((function () {
         individuals.push(individual(dumbMutate, fitnessCallback).data(getVoyager(distances.length)));
     }
 
+    console.log('5 individuals created');
+
     return individuals;
 })());
 
 console.log('BEFORE');
 console.log(routesPopulation.best().data(), 1/routesPopulation.best().fitness());
-console.log(routesPopulation.data().map(function(individual) {
-    return individual.data();
-}));
+// console.log(routesPopulation.data().map(function(individual) {
+//     return individual.data();
+// }));
 
 var seq = sequencer(routesPopulation);
 seq.recombineCallback(dumbRecombine);
 
+seq.pM(0.01);
 var routesPopulation2 = seq.run(30000);
 
 console.log('AFTER');

@@ -19,14 +19,16 @@ module.exports = function sequencer (population) {
         recombineCallback: null
     };
 
-    var bestFitness = 0;
+    var bestFitness = 0,
+        stepCount = 1;
 
     var model = {
         step: function() {
             var couple = config.population.selection();
-
+            stepCount++;
             couple.recombineCallback(config.recombineCallback);
             var child = couple.recombine();
+            // console.log('new child born');
 
 
             if (config.randomizer() < config.pM) {
@@ -35,20 +37,23 @@ module.exports = function sequencer (population) {
 
             if (child.fitness() !== -1) {
                 config.population = config.population.add(child).eliminate();
+                // console.log('updating population');
             }
         },
         run: function(delta) {
+            console.log('delta', delta);
             var count = 0;
 
             do {
                 model.step();
-
-                count++;
                 if (config.population.bestFitness() === bestFitness) {
-
+                    count++;
                 } else {
                     count = 0;
+                    var percent = config.population.bestFitness()*100/bestFitness;
+
                     bestFitness = config.population.bestFitness();
+                    console.log('step ' + stepCount + ', fitness: ' + bestFitness, ', +' + (percent-100) + '%');
                 }
             } while(count < delta);
 

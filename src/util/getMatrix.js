@@ -11,13 +11,12 @@ var getDistance = function (location1, location2) {
 
   var result = Math.sqrt(Math.pow(location1.x - location2.x, 2) + Math.pow(location1.y - location2.y, 2));
 
-  return result;
-}
-
-var fromOrigin = function (origin) {
-  return function (location) {
-    return getDistance(origin, location);
+  if (result !== result) {
+    console.log(location1, location2);
+    throw new Error('cannot compute distance');
   }
+
+  return result;
 }
 
 var getLocations = function (callback) {
@@ -38,22 +37,26 @@ var getLocations = function (callback) {
 
 var getMatrix = function (callback) {
   getLocations(function(err, locations){
+    console.log('data imported');
     var matrix = [];
     for (var i = 0; i < locations.length; i++) {
-      var origin = locations[i];
       matrix[i] = [];
-      var distanceTo = fromOrigin(locations[i]);
       for (var j = 0; j < locations.length; j++) {
-        var destination = locations[j];
         if (i === j) {
           matrix[i][j] = -1;
           continue;
         }
 
-        matrix[i][j] = distanceTo(destination);
+        matrix[i][j] = getDistance(locations[i], locations[j]);
+
+        // if (!matrix[j]) {
+        //   matrix[j] =  [];
+        // }
+
+        // matrix[j][i] = matrix[i][j];
       }
     }
-
+    console.log('matrix generated');
     return callback(null, matrix);
   });
 };
