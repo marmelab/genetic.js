@@ -24,21 +24,28 @@ module.exports = function sequencer (population) {
     var model = {
         step: function() {
             var couple = config.population.selection();
+
             couple.recombineCallback(config.recombineCallback);
+            var child = couple.recombine();
+
 
             if (config.randomizer() < config.pM) {
                 child.mutate();
             }
 
-            config.population = config.population.add(child).eliminate();
+            if (child.fitness() !== -1) {
+                config.population = config.population.add(child).eliminate();
+            }
         },
         run: function(delta) {
             var count = 0;
 
             do {
                 model.step();
+
+                count++;
                 if (config.population.bestFitness() === bestFitness) {
-                    count++;
+
                 } else {
                     count = 0;
                     bestFitness = config.population.bestFitness();

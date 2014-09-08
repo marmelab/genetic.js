@@ -21,10 +21,10 @@ module.exports = function couple (left, right) {
     var model = {
         recombine: function() {
             return individual(
-                config.left.mutateCallback,
-                config.left.fitnessCallback
+                config.left.mutateCallback(),
+                config.left.fitnessCallback()
             ).data(
-                config.recombineCallback(config.left, config.right, config.cutCount)
+                config.recombineCallback(config.left.data(), config.right.data(), config.cutCount)
             );
         }
     };

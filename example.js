@@ -8,12 +8,12 @@ var dumbRecombine = require('./src/callback/recombine/dumbRecombine');
 
 
  var distances = [
-    [-1, 3, 2, -1, 5, -1],
-    [3, -1, -1, 6, 4, -1],
-    [2, -1, -1, -1, -1, 2],
-    [-1, 6, -1, -1, 1, 2],
-    [5, 4, -1, 1, -1, -1],
-    [-1, -1, 2, 2, -1, -1]
+    [-1, 3, 4, 2, 1, 6],
+    [3, -1, 6, 8, 1, 3],
+    [4, 5, -1, 7, 2, 1],
+    [1, 1, 2, -1, 4, 3],
+    [3, 1, 4, 5, -1, 7],
+    [4, 5, 3, 1, 4, -1]
 ];
 
 var fitnessCallback = function(data) {
@@ -21,11 +21,11 @@ var fitnessCallback = function(data) {
 
     for (var i = 1; i < data.length; i++) {
         if (data.hasOwnProperty(i)) {
-            if (distances[i][i-1] === -1) {
-                return 0.0000001
+            if (distances[data[i-1] - 1][data[i] - 1] === -1) {
+                return -1;
             }
 
-            totalDistance += distances[i][i-1]
+            totalDistance += distances[data[i-1] - 1][data[i] - 1];
         }
     }
 
@@ -33,11 +33,24 @@ var fitnessCallback = function(data) {
 }
 
 var routesPopulation = population(selectionWheel).data([
-    individual(dumbMutate, fitnessCallback).data([1, 2, 4, 6, 3, 1]),
-    individual(dumbMutate, fitnessCallback).data([2, 1, 3, 6, 4, 5])
+    individual(dumbMutate, fitnessCallback).data([1, 2, 4, 3, 5, 6]),
+    individual(dumbMutate, fitnessCallback).data([6, 5, 4, 3, 1, 2])
 ]);
+
+console.log('BEFORE');
+console.log(routesPopulation.best().data(), 1/routesPopulation.best().fitness());
+console.log(routesPopulation.data().map(function(individual) {
+    return individual.data();
+}));
 
 var seq = sequencer(routesPopulation);
 seq.recombineCallback(dumbRecombine);
 
-seq.run(10);
+var routesPopulation2 = seq.run(20000);
+
+console.log('AFTER');
+console.log(routesPopulation2.best().data(), 1/routesPopulation2.best().fitness());
+console.log(routesPopulation2.data().map(function(individual) {
+    return individual.data();
+}));
+

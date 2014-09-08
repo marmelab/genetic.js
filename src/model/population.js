@@ -22,13 +22,14 @@ module.exports = function population (selectionCallback) {
          * @return {couple}
          */
         selection: function() {
-            return config.selectionCallback(config.data);
+            return config.selectionCallback([].concat(config.data));
         },
 
         add: function(individual) {
             var newPopulation = population(config.selectionCallback)
             var data = config.data;
             data.push(individual);
+
             return newPopulation.data(data);
         },
 
@@ -66,6 +67,24 @@ module.exports = function population (selectionCallback) {
             }
 
             return bestFitness;
+        },
+
+        best: function() {
+           var data = config.data,
+               bestFitness = null,
+               best = null
+            ;
+
+            for (var i in data) {
+                if (data.hasOwnProperty(i)) {
+                    if (!bestFitness || data[i].fitness() > bestFitness) {
+                        bestFitness = data[i].fitness();
+                        best = data[i];
+                    }
+                }
+            }
+
+            return best;
         }
     };
 

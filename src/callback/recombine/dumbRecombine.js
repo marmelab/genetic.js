@@ -14,13 +14,13 @@ module.exports = function() {
     };
 
     function dumbRecombine(left, right, cutCount) {
-        var resultCouple = couple();
         var cutOffset = random(1,left.length - 1);
 
         var child = left.slice(0, cutOffset);
-        var i = cutOffset + 1;
+        var i = (cutOffset + 1)%(right.length);
 
         while (child.length < left.length) {
+            //console.log(child, right, i);
             if (child.indexOf(right[i]) === -1) {
                 child.push(right[i]);
             }
@@ -34,4 +34,4 @@ module.exports = function() {
     configurable(dumbRecombine, config);
 
     return dumbRecombine;
-};
+}();

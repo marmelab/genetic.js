@@ -18,10 +18,10 @@ module.exports = function individual (mutateCallback, fitnessCallback) {
 
     var model = {
         mutate: function() {
-            return individual(config.mutateCallback, config.fitnessCallback).data(config.mutation(config.data));
+            return individual(config.mutateCallback, config.fitnessCallback).data(config.mutateCallback(config.data));
         },
 
-        fitness: function() {console.log(config.fitnessCallback);
+        fitness: function() {
             return config.fitnessCallback(config.data);
         }
     };
