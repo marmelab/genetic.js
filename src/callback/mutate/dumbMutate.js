@@ -27,4 +27,4 @@ module.exports = function() {
     configurable(dumbMutate, config);
 
     return dumbMutate;
-};
+}();

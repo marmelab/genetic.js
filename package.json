@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "node-csv": "^0.1.2",
-    "csv-parse": "0.0.6"
+    "csv-parse": "0.0.6",
+    "chance": "^0.6.1"
   }
 }
