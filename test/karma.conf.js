@@ -8,7 +8,7 @@ module.exports = function (config) {
             {pattern: 'src/**/*.js', included: false},
 
             // test files
-            {pattern: 'test/problem/problem2Spec.js', included: false},
+            {pattern: 'test/model/genotypeSpec.js', included: false},
 
             'test/main-test.js'
         ],
